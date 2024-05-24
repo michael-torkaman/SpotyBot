@@ -27,3 +27,9 @@
 /home/tekebai/Projects/SpotyBot/SpotyBot/obj/Debug/net8.0/SpotyBot.pdb
 /home/tekebai/Projects/SpotyBot/SpotyBot/obj/Debug/net8.0/SpotyBot.genruntimeconfig.cache
 /home/tekebai/Projects/SpotyBot/SpotyBot/obj/Debug/net8.0/ref/SpotyBot.dll
+/home/tekebai/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/DotNetEnv.dll
+/home/tekebai/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll
+/home/tekebai/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/home/tekebai/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll
+/home/tekebai/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/Sprache.dll
+/home/tekebai/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/SpotifyAPI.Web.dll
