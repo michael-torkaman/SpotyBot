@@ -5394,19 +5394,19 @@
     ]
   },
   "packageFolders": {
-    "/home/tekebai/.nuget/packages/": {}
+    "/Users/michaeltorkaman/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/tekebai/Projects/SpotyBot/SpotyBot/SpotyBot.csproj",
+      "projectUniqueName": "/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/SpotyBot.csproj",
       "projectName": "SpotyBot",
-      "projectPath": "/home/tekebai/Projects/SpotyBot/SpotyBot/SpotyBot.csproj",
-      "packagesPath": "/home/tekebai/.nuget/packages/",
-      "outputPath": "/home/tekebai/Projects/SpotyBot/SpotyBot/obj/",
+      "projectPath": "/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/SpotyBot.csproj",
+      "packagesPath": "/Users/michaeltorkaman/.nuget/packages/",
+      "outputPath": "/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/tekebai/.nuget/NuGet/NuGet.Config"
+        "/Users/michaeltorkaman/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -5424,11 +5424,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -5464,7 +5459,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

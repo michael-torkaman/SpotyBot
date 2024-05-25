@@ -10,14 +10,12 @@ class SpotifyBot{
     public SpotifyClient spotifyClient;
 
     public SpotifyBot(string clientId, string clientSecret){
-        spotifyClientConfig = new SpotifyClientConfig
-
+        spotifyClient = new SpotifyClient(SpotifyClientConfig.CreateDefault().WithAuthenticator(new ClientCredentialsAuthenticator(clientId, clientSecret)));
     }
 
-
-    public async void GetTrackByID(string id){
+    public async Task<string> GetTrackByID(string id){
         var track = await spotifyClient.Tracks.Get(id);
         await Task.CompletedTask;
-        Console.WriteLine(track.Name);
+        return track.Name.ToString();
     }
 }
