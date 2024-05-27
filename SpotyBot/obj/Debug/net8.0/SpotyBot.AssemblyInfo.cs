@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpotyBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96e9d4f451c8086878b209bdcb1f2fda78461211")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6460e57ff0b3919cd340c1d4db7e7ebb62038bba")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpotyBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpotyBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

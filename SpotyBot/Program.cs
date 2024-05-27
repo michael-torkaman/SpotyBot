@@ -2,6 +2,7 @@
 using Discord.Interactions;
 using Discord.WebSocket;
 using DotNetEnv;
+using Microsoft.VisualBasic;
 using SpotifyAPI.Web;
 
 namespace SpotyBot{
@@ -12,27 +13,32 @@ namespace SpotyBot{
             // load .env files containing discord token   
             DotNetEnv.Env.Load();
 
-            // var DiscordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-            // if(DiscordToken == null) return;
+            // Discord bot token
+            var DiscordToken = Environment.GetEnvironmentVariable("DISCORDBOT_TOKEN");
+            if (DiscordToken == null) return;
 
-            // DiscordBot discordBot = new DiscordBot();
-            // await discordBot.StartAsyncBot(DiscordToken);
-            // await Task.Delay(-1);
+            // setting spotify client_id and client_secret 
+            var spotifyClientId = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_ID");
+            var spotifyClientSecret = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_SECRET");
 
-            var spotifyClientId =  Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_ID");
-            var spotifyClientSecret =  Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_SECRET");
+            if (spotifyClientId == null || spotifyClientSecret == null) return;
 
-            if(spotifyClientId == null || spotifyClientSecret == null){
-                Console.WriteLine("didnt load .env");
-                return;
-            }
-
-            SpotifyBot spotifyBot = new SpotifyBot(spotifyClientId, spotifyClientSecret);
-            var trackName = spotifyBot.GetTrackByID("1s6ux0lNiTziSrd7iUAADH");
-            Console.WriteLine(trackName);
+            //init discord bot 
+            DiscordBot discordBot = new DiscordBot();
+            await discordBot.StartAsyncBot(DiscordToken);
             await Task.Delay(-1);
-        
 
+            // init spotify bot
+            SpotifyBot spotifyBot = new SpotifyBot(spotifyClientId, spotifyClientSecret);
+
+            var = discordBot.ReceiveMessage();
+
+        
+        //     }
+
+        //     var trackName = spotifyBot.GetTrackByID("1s6ux0lNiTziSrd7iUAADH");
+        //     Console.WriteLine(trackName);
+        //     await Task.Delay(-1);
         }
     }
 }

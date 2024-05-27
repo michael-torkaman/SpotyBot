@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Discord;
 using Discord.WebSocket;
 using DotNetEnv;
 
 namespace SpotyBot;
 public class DiscordBot{
     private readonly DiscordSocketClient client; 
+
+    private ulong? channelId;
 
     public DiscordBot(){
         client = new DiscordSocketClient();
@@ -17,10 +20,29 @@ public class DiscordBot{
         await this.client.StartAsync();
     }
 
-    public async Task ReceiveMessage(SocketMessage socketMessage){
-        if(socketMessage.Author.IsBot) return;
+    public async Task<string> ReceiveMessage(SocketMessage socketMessage){
+        if(socketMessage.Author.IsBot) return null;
+        if(channelId == null) SetCahannelId(socketMessage.Channel.Id);
 
         await Task.CompletedTask;
-        await socketMessage.Channel.SendMessageAsync("Hello Friend");
+
+        return socketMessage.ToString();
     }
+
+    private void SetCahannelId(ulong channelId){
+        this.channelId = channelId;
+    }
+    public async void SendMessageAsync(string message)
+    {
+        var channel = client.GetChannel(channelId.Value) as IMessageChannel;
+        if (channel != null)
+        {
+            await channel.SendMessageAsync(message);
+        }
+    }
+
+
 } 
+/// notes to self
+/// would it make more sense to place the interaction between spotify and discord in the Main of the program or
+/// have the Discord bot have a spotfy bot within it. 
