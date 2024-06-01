@@ -4,17 +4,18 @@ using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using SpotifyAPI.Web;
 
-class SpotifyBot{
+class SpotifyService{
 
-    SpotifyClientConfig spotifyClientConfig;
+    private readonly SpotifyClient _spotifyClient;
 
-    public SpotifyClient spotifyClient;
+    private string _playlistName;
 
-    public SpotifyBot(string clientId, string clientSecret){
-        spotifyClient = new SpotifyClient(SpotifyClientConfig.
+    public SpotifyService(string clientId, string clientSecret){
+        _spotifyClient = new SpotifyClient(SpotifyClientConfig.
             CreateDefault().
             WithAuthenticator(new ClientCredentialsAuthenticator(clientId, clientSecret))
             );
+        
     }
 
     /// <summary>
@@ -24,9 +25,26 @@ class SpotifyBot{
     /// <returns></returns>
     public async Task<string> GetTrackByID(string id)
     {
-        var track = await spotifyClient.Tracks.Get(id);
+        var track = await _spotifyClient.Tracks.Get(id);
         await Task.CompletedTask;
         return track.Name.ToString();
+    }
+
+    public async Task<string> EnsurePlaylistExists(){
+        var currentUser = await _spotifyClient.UserProfile.Current();
+        var playlists = await _spotifyClient.Playlists.CurrentUsers();
+        var playlist = playlists.Items.Find(p => p.Name == _playlistName);
+        
+        if(playlist != null){
+            return playlist.Id;
+        }
+
+        var newPlaylist = await _spotifyClient.Playlists.Create(currentUser.Id, new PlaylistCreateRequest(_playlistName){
+            Description = "song suggestions from friends",
+            Public = false
+        });
+
+        return newPlaylist.Id;
     }
 
     /// <summary>
@@ -40,4 +58,6 @@ class SpotifyBot{
         var match = regex.Match(url);
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
+
+
 }
