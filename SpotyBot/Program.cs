@@ -29,7 +29,7 @@ namespace SpotyBot{
             await Task.Delay(-1);
 
             // init spotify bot
-            SpotifyBot spotifyBot = new SpotifyBot(spotifyClientId, spotifyClientSecret);
+            SpotifyService spotifyBot = new SpotifyService(spotifyClientId, spotifyClientSecret);
 
 
         
