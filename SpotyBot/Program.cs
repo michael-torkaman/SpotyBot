@@ -23,21 +23,13 @@ namespace SpotyBot{
 
             if (spotifyClientId == null || spotifyClientSecret == null) return;
 
+            // init spotify bot
+            SpotifyService spotifyService = new SpotifyService(spotifyClientId, spotifyClientSecret);
+
             //init discord bot 
-            DiscordBot discordBot = new DiscordBot();
+            DiscordBot discordBot = new DiscordBot(spotifyService);
             await discordBot.StartAsyncBot(DiscordToken);
             await Task.Delay(-1);
-
-            // init spotify bot
-            SpotifyService spotifyBot = new SpotifyService(spotifyClientId, spotifyClientSecret);
-
-
-        
-        //     }
-
-        //     var trackName = spotifyBot.GetTrackByID("1s6ux0lNiTziSrd7iUAADH");
-        //     Console.WriteLine(trackName);
-        //     await Task.Delay(-1);
         }
     }
 }

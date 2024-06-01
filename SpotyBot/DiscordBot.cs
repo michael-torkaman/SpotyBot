@@ -6,23 +6,39 @@ using DotNetEnv;
 
 namespace SpotyBot;
 public class DiscordBot{
-    private readonly DiscordSocketClient _client; 
+    private readonly DiscordSocketClient _discordClient; 
     private ulong? channelId;
-    private SpotifyService spotifyService;
+    private SpotifyService _spotifyService;
 
-    public DiscordBot(){
-        _client = new DiscordSocketClient();
-        _client.MessageReceived += ReceiveMessage;
+    public DiscordBot(SpotifyService spotifyService){
+        _discordClient = new DiscordSocketClient();
+        spotifyService = spotifyService;
+        _discordClient.MessageReceived += ReceiveMessage;
     }
 
     public async Task StartAsyncBot(string token){
-        await this._client.LoginAsync(Discord.TokenType.Bot, token); 
-        await this._client.StartAsync();
+        await this._discordClient.LoginAsync(Discord.TokenType.Bot, token); 
+
+        await this._discordClient.StartAsync();
     }
 
+    public async void  MessageHandler(SocketMessage message){
+        if(message.Author.IsBot) return;
+
+        //set the channel id
+        if (channelId == null) SetCahannelId(message.Channel.Id);
+
+        var trackId = _spotifyService.ExtractIDFromURL(message.ToString());
+
+        if (trackId == string.Empty) { SendMessageAsync("Thats not a song "); return; }
+
+        var trackInfo = await _spotifyService.GetTrackByID(trackId);
+
+        SendMessageAsync(trackInfo.Name.ToString());
+    }
+    
     public async Task<string> ReceiveMessage(SocketMessage socketMessage){
         if(socketMessage.Author.IsBot) return null;
-        if(channelId == null) SetCahannelId(socketMessage.Channel.Id);
 
         await Task.CompletedTask;
 
@@ -32,16 +48,15 @@ public class DiscordBot{
     private void SetCahannelId(ulong channelId){
         this.channelId = channelId;
     }
+
     public async void SendMessageAsync(string message)
     {
-        var channel = _client.GetChannel(channelId.Value) as IMessageChannel;
+        var channel = _discordClient.GetChannel(channelId.Value) as IMessageChannel;
         if (channel != null)
         {
             await channel.SendMessageAsync(message);
         }
     }
-
-
 } 
 /// notes to self
 /// would it make more sense to place the interaction between spotify and discord in the Main of the program or
