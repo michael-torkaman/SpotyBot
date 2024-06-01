@@ -31,7 +31,6 @@ namespace SpotyBot{
             // init spotify bot
             SpotifyBot spotifyBot = new SpotifyBot(spotifyClientId, spotifyClientSecret);
 
-            var = discordBot.ReceiveMessage();
 
         
         //     }
