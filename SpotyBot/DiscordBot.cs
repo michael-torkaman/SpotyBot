@@ -6,18 +6,18 @@ using DotNetEnv;
 
 namespace SpotyBot;
 public class DiscordBot{
-    private readonly DiscordSocketClient client; 
-
+    private readonly DiscordSocketClient _client; 
     private ulong? channelId;
+    private SpotifyService spotifyService;
 
     public DiscordBot(){
-        client = new DiscordSocketClient();
-        client.MessageReceived += ReceiveMessage;
+        _client = new DiscordSocketClient();
+        _client.MessageReceived += ReceiveMessage;
     }
 
     public async Task StartAsyncBot(string token){
-        await this.client.LoginAsync(Discord.TokenType.Bot, token); 
-        await this.client.StartAsync();
+        await this._client.LoginAsync(Discord.TokenType.Bot, token); 
+        await this._client.StartAsync();
     }
 
     public async Task<string> ReceiveMessage(SocketMessage socketMessage){
@@ -34,7 +34,7 @@ public class DiscordBot{
     }
     public async void SendMessageAsync(string message)
     {
-        var channel = client.GetChannel(channelId.Value) as IMessageChannel;
+        var channel = _client.GetChannel(channelId.Value) as IMessageChannel;
         if (channel != null)
         {
             await channel.SendMessageAsync(message);

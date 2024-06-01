@@ -1,9 +1,12 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using SpotifyAPI.Web;
+using SpotifyAPI.Web.Http;
 
+namespace SpotyBot;
 class SpotifyService{
 
     private readonly SpotifyClient _spotifyClient;
@@ -15,7 +18,6 @@ class SpotifyService{
             CreateDefault().
             WithAuthenticator(new ClientCredentialsAuthenticator(clientId, clientSecret))
             );
-        
     }
 
     /// <summary>
@@ -45,6 +47,17 @@ class SpotifyService{
         });
 
         return newPlaylist.Id;
+    }
+
+    
+
+    public async Task<bool> AddToPlaylist(string trackId)
+    {
+        var playlistId = await EnsurePlaylistExists();
+        var addItemsRequest = new PlaylistAddItemsRequest(new List<string> { $"spotify:track:{trackId}" });
+        var response = await _spotifyClient.Playlists.AddItems(playlistId, addItemsRequest);
+
+        return response.SnapshotId != null; 
     }
 
     /// <summary>
