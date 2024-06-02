@@ -7,11 +7,11 @@ using SpotifyAPI.Web;
 using SpotifyAPI.Web.Http;
 
 namespace SpotyBot;
-class SpotifyService{
+public class SpotifyService{
 
     private readonly SpotifyClient _spotifyClient;
 
-    private string _playlistName;
+    private const string _playlistName = "Seattle Satellites";
 
     public SpotifyService(string clientId, string clientSecret){
         _spotifyClient = new SpotifyClient(SpotifyClientConfig.
@@ -25,11 +25,10 @@ class SpotifyService{
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<string> GetTrackByID(string id)
+    public async Task<SpotifyAPI.Web.FullTrack> GetTrackByID(string id)
     {
         var track = await _spotifyClient.Tracks.Get(id);
-        await Task.CompletedTask;
-        return track.Name.ToString();
+        return track;
     }
 
     public async Task<string> EnsurePlaylistExists(){
@@ -65,12 +64,10 @@ class SpotifyService{
     /// </summary>
     /// <param name="url"></param>
     /// <returns></returns>
-    private static string ExtractIDFromURL(string url)
+    public string ExtractIDFromURL(string url)
     {
         var regex = new Regex(@"https:\/\/open\.spotify\.com\/track\/([a-zA-Z0-9]+)");
         var match = regex.Match(url);
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
-
-
 }
