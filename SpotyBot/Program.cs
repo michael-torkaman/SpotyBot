@@ -20,15 +20,17 @@ namespace SpotyBot{
             // setting spotify client_id and client_secret 
             var spotifyClientId = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_ID");
             var spotifyClientSecret = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_SECRET");
+            var spotifyRedirectUri = Environment.GetEnvironmentVariable("SPOTIFYSERVICE_URI");
 
             if (spotifyClientId == null || spotifyClientSecret == null) return;
 
             // init spotify bot
-            SpotifyService spotifyService = new SpotifyService(spotifyClientId, spotifyClientSecret);
+            SpotifyService spotifyService = new SpotifyService(spotifyClientId, spotifyClientSecret, spotifyRedirectUri);
 
             //init discord bot 
             DiscordBot discordBot = new DiscordBot(spotifyService);
             await discordBot.StartAsyncBot(DiscordToken);
+            
             await Task.Delay(-1);
 
             
