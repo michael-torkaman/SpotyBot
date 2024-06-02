@@ -28,7 +28,6 @@ public class SpotifyService{
     public async Task<SpotifyAPI.Web.FullTrack> GetTrackByID(string id)
     {
         var track = await _spotifyClient.Tracks.Get(id);
-        await Task.CompletedTask;
         return track;
     }
 

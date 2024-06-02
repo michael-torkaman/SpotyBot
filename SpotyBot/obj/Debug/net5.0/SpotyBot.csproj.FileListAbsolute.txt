@@ -1,0 +1,6 @@
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net5.0/SpotyBot.csproj.AssemblyReference.cache
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net5.0/SpotyBot.GeneratedMSBuildEditorConfig.editorconfig
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net5.0/SpotyBot.AssemblyInfoInputs.cache
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net5.0/SpotyBot.AssemblyInfo.cs
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net5.0/SpotyBot.csproj.CoreCompileInputs.cache
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net5.0/SpotyBot.sourcelink.json

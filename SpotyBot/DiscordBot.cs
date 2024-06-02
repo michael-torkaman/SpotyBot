@@ -12,7 +12,10 @@ public class DiscordBot{
 
     public DiscordBot(SpotifyService spotifyService)
     {
-        _discordClient = new DiscordSocketClient();
+        _discordClient = new DiscordSocketClient(new DiscordSocketConfig{
+            LogLevel = LogSeverity.Info,
+                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+        });
         _spotifyService = spotifyService;
 
         _discordClient.MessageReceived += MessageHandler;
@@ -28,14 +31,15 @@ public class DiscordBot{
     public async Task SimpleMessageHandler(SocketMessage message)
     {
         if (message.Author.IsBot) return;
+        if (channelId == null) SetCahannelId(message.Channel.Id);
 
         // Log received message
         Console.WriteLine($"Received message: {message.Content}");
-
+        Console.WriteLine($"Author: {message.Author}");
+        Console.WriteLine($"Channel: {message.Channel.Name}");
         // Echo the message back to the channel
-        SendMessageAsync($"Echo: {message.Content}");
+        await SendMessageAsync($"Echo: {message.Content}");
 
-        await Task.CompletedTask;
     }
 
     public async Task MessageHandler(SocketMessage message){
@@ -46,16 +50,18 @@ public class DiscordBot{
 
         Console.WriteLine($"Received message: {message.Author}");
 
-        var content = message.Content; 
-
         var trackId = _spotifyService.ExtractIDFromURL(message.Content);
 
-        if (trackId == string.Empty) { SendMessageAsync("Thats not a song "); return; }
+        if (trackId == string.Empty) { await SendMessageAsync("Thats not a song "); return; }
 
         var trackInfo = await _spotifyService.GetTrackByID(trackId);
 
-        SendMessageAsync(trackInfo.Name.ToString());
+        await _spotifyService.EnsurePlaylistExists();
+
+        await _spotifyService.AddToPlaylist(trackId);
     }
+
+
 
     private Task Log(LogMessage logMessage)
     {
@@ -68,7 +74,7 @@ public class DiscordBot{
         this.channelId = _channelId;
     }
 
-    public async void SendMessageAsync(string message)
+    public async Task SendMessageAsync(string message)
     {
         var channel = _discordClient.GetChannel(channelId.Value) as IMessageChannel;
         if (channel != null)
