@@ -25,13 +25,28 @@ public class DiscordBot{
         await this._discordClient.StartAsync();
     }
 
+    public async Task SimpleMessageHandler(SocketMessage message)
+    {
+        if (message.Author.IsBot) return;
+
+        // Log received message
+        Console.WriteLine($"Received message: {message.Content}");
+
+        // Echo the message back to the channel
+        SendMessageAsync($"Echo: {message.Content}");
+
+        await Task.CompletedTask;
+    }
+
     public async Task MessageHandler(SocketMessage message){
         if(message.Author.IsBot) return;
 
         //set the channel id
         if (channelId == null) SetCahannelId(message.Channel.Id);
 
-        Console.WriteLine($"Received message: {message.Content}");
+        Console.WriteLine($"Received message: {message.Author}");
+
+        var content = message.Content; 
 
         var trackId = _spotifyService.ExtractIDFromURL(message.Content);
 
