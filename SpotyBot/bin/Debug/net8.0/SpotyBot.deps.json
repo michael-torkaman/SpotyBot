@@ -10,7 +10,8 @@
         "dependencies": {
           "Discord.Net": "3.15.0",
           "DotNetEnv": "3.0.0",
-          "SpotifyAPI.Web": "7.1.1"
+          "SpotifyAPI.Web": "7.1.1",
+          "SpotifyAPI.Web.Auth": "7.1.1"
         },
         "runtime": {
           "SpotyBot.dll": {}
@@ -114,6 +115,17 @@
           "lib/netstandard1.3/DotNetEnv.dll": {
             "assemblyVersion": "3.0.0.0",
             "fileVersion": "3.0.0.0"
+          }
+        }
+      },
+      "EmbedIO/3.5.2": {
+        "dependencies": {
+          "Unosquare.Swan.Lite": "3.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/EmbedIO.dll": {
+            "assemblyVersion": "3.5.2.0",
+            "fileVersion": "3.5.2.0"
           }
         }
       },
@@ -288,6 +300,18 @@
         },
         "runtime": {
           "lib/net8.0/SpotifyAPI.Web.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SpotifyAPI.Web.Auth/7.1.1": {
+        "dependencies": {
+          "EmbedIO": "3.5.2",
+          "SpotifyAPI.Web": "7.1.1"
+        },
+        "runtime": {
+          "lib/net8.0/SpotifyAPI.Web.Auth.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -911,6 +935,17 @@
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0"
         }
+      },
+      "Unosquare.Swan.Lite/3.1.0": {
+        "dependencies": {
+          "System.ValueTuple": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Swan.Lite.dll": {
+            "assemblyVersion": "3.1.0.0",
+            "fileVersion": "3.1.0.0"
+          }
+        }
       }
     }
   },
@@ -975,6 +1010,13 @@
       "sha512": "sha512-ddE17PtN+lijtSQH9NYk9vzCikHs1wPhiVxgwvLrWFPru0kYvh+8nSbjo18iZYFOznu83g5zrKrYYKHf3iK1vw==",
       "path": "dotnetenv/3.0.0",
       "hashPath": "dotnetenv.3.0.0.nupkg.sha512"
+    },
+    "EmbedIO/3.5.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YU4j+3XvuO8/VPkNf7KWOF1TpMhnyVhXnPsG1mvnDhTJ9D5BZOFXVDvCpE/SkQ1AJ0Aa+dXOVSW3ntgmLL7aJg==",
+      "path": "embedio/3.5.2",
+      "hashPath": "embedio.3.5.2.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
       "type": "package",
@@ -1164,6 +1206,13 @@
       "sha512": "sha512-xMgjZkBqVlZNZ/hROhx5XsKEWQtxRmFTZs5mv6Z9w+fwzBnCR1EFSwTcdpKNiVx/Pa+9p7PJO0q1Cb+fOkQq6Q==",
       "path": "spotifyapi.web/7.1.1",
       "hashPath": "spotifyapi.web.7.1.1.nupkg.sha512"
+    },
+    "SpotifyAPI.Web.Auth/7.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-t0LE3qQQ0rw3rsKkCOWTCU6+3sa0ZMW3XnY+1aj/hoWxQESdgp8jDithvKaPTp5UoRe1+p0G0mqiIqnlHGpN2A==",
+      "path": "spotifyapi.web.auth/7.1.1",
+      "hashPath": "spotifyapi.web.auth.7.1.1.nupkg.sha512"
     },
     "Sprache/2.3.1": {
       "type": "package",
@@ -1591,6 +1640,13 @@
       "sha512": "sha512-5zJ0XDxAIg8iy+t4aMnQAu0MqVbqyvfoUVl1yDV61xdo3Vth45oA2FoY4pPkxYAH5f8ixpmTqXeEIya95x0aCQ==",
       "path": "system.xml.xdocument/4.3.0",
       "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
+    },
+    "Unosquare.Swan.Lite/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-X3s5QE/KMj3WAPFqFve7St+Ds10BB50u8kW8PmKIn7FVkn7yEXe9Yxr2htt1WV85DRqfFR0MN/BUNHkGHtL4OQ==",
+      "path": "unosquare.swan.lite/3.1.0",
+      "hashPath": "unosquare.swan.lite.3.1.0.nupkg.sha512"
     }
   }
 }

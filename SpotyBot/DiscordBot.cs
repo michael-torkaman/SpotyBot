@@ -61,8 +61,6 @@ public class DiscordBot{
         await _spotifyService.AddToPlaylist(trackId);
     }
 
-
-
     private Task Log(LogMessage logMessage)
     {
         Console.WriteLine(logMessage.ToString());

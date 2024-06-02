@@ -135,6 +135,22 @@
           "lib/netstandard1.3/DotNetEnv.dll": {}
         }
       },
+      "EmbedIO/3.5.2": {
+        "type": "package",
+        "dependencies": {
+          "Unosquare.Swan.Lite": "3.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/EmbedIO.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/EmbedIO.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
         "type": "package",
         "compile": {
@@ -491,6 +507,23 @@
         },
         "runtime": {
           "lib/net8.0/SpotifyAPI.Web.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SpotifyAPI.Web.Auth/7.1.1": {
+        "type": "package",
+        "dependencies": {
+          "EmbedIO": "3.5.2",
+          "SpotifyAPI.Web": "7.1.1"
+        },
+        "compile": {
+          "lib/net8.0/SpotifyAPI.Web.Auth.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/SpotifyAPI.Web.Auth.dll": {
             "related": ".xml"
           }
         }
@@ -1645,6 +1678,22 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
+      },
+      "Unosquare.Swan.Lite/3.1.0": {
+        "type": "package",
+        "dependencies": {
+          "System.ValueTuple": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Swan.Lite.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Swan.Lite.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -1809,6 +1858,20 @@
         "dotnetenv.3.0.0.nupkg.sha512",
         "dotnetenv.nuspec",
         "lib/netstandard1.3/DotNetEnv.dll"
+      ]
+    },
+    "EmbedIO/3.5.2": {
+      "sha512": "YU4j+3XvuO8/VPkNf7KWOF1TpMhnyVhXnPsG1mvnDhTJ9D5BZOFXVDvCpE/SkQ1AJ0Aa+dXOVSW3ntgmLL7aJg==",
+      "type": "package",
+      "path": "embedio/3.5.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "embedio.3.5.2.nupkg.sha512",
+        "embedio.nuspec",
+        "lib/netstandard2.0/EmbedIO.dll",
+        "lib/netstandard2.0/EmbedIO.pdb",
+        "lib/netstandard2.0/EmbedIO.xml"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
@@ -2252,6 +2315,29 @@
         "lib/netstandard2.1/SpotifyAPI.Web.xml",
         "spotifyapi.web.7.1.1.nupkg.sha512",
         "spotifyapi.web.nuspec"
+      ]
+    },
+    "SpotifyAPI.Web.Auth/7.1.1": {
+      "sha512": "t0LE3qQQ0rw3rsKkCOWTCU6+3sa0ZMW3XnY+1aj/hoWxQESdgp8jDithvKaPTp5UoRe1+p0G0mqiIqnlHGpN2A==",
+      "type": "package",
+      "path": "spotifyapi.web.auth/7.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net5.0/SpotifyAPI.Web.Auth.dll",
+        "lib/net5.0/SpotifyAPI.Web.Auth.xml",
+        "lib/net6.0/SpotifyAPI.Web.Auth.dll",
+        "lib/net6.0/SpotifyAPI.Web.Auth.xml",
+        "lib/net7.0/SpotifyAPI.Web.Auth.dll",
+        "lib/net7.0/SpotifyAPI.Web.Auth.xml",
+        "lib/net8.0/SpotifyAPI.Web.Auth.dll",
+        "lib/net8.0/SpotifyAPI.Web.Auth.xml",
+        "lib/netstandard2.0/SpotifyAPI.Web.Auth.dll",
+        "lib/netstandard2.0/SpotifyAPI.Web.Auth.xml",
+        "lib/netstandard2.1/SpotifyAPI.Web.Auth.dll",
+        "lib/netstandard2.1/SpotifyAPI.Web.Auth.xml",
+        "spotifyapi.web.auth.7.1.1.nupkg.sha512",
+        "spotifyapi.web.auth.nuspec"
       ]
     },
     "Sprache/2.3.1": {
@@ -5384,13 +5470,29 @@
         "system.xml.xdocument.4.3.0.nupkg.sha512",
         "system.xml.xdocument.nuspec"
       ]
+    },
+    "Unosquare.Swan.Lite/3.1.0": {
+      "sha512": "X3s5QE/KMj3WAPFqFve7St+Ds10BB50u8kW8PmKIn7FVkn7yEXe9Yxr2htt1WV85DRqfFR0MN/BUNHkGHtL4OQ==",
+      "type": "package",
+      "path": "unosquare.swan.lite/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/Swan.Lite.dll",
+        "lib/net461/Swan.Lite.xml",
+        "lib/netstandard2.0/Swan.Lite.dll",
+        "lib/netstandard2.0/Swan.Lite.xml",
+        "unosquare.swan.lite.3.1.0.nupkg.sha512",
+        "unosquare.swan.lite.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Discord.net >= 3.15.0",
       "DotNetEnv >= 3.0.0",
-      "SpotifyAPI.Web >= 7.1.1"
+      "SpotifyAPI.Web >= 7.1.1",
+      "SpotifyAPI.Web.Auth >= 7.1.1"
     ]
   },
   "packageFolders": {
@@ -5439,6 +5541,10 @@
             "version": "[3.0.0, )"
           },
           "SpotifyAPI.Web": {
+            "target": "Package",
+            "version": "[7.1.1, )"
+          },
+          "SpotifyAPI.Web.Auth": {
             "target": "Package",
             "version": "[7.1.1, )"
           }

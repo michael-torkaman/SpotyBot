@@ -30,6 +30,17 @@ namespace SpotyBot{
             DiscordBot discordBot = new DiscordBot(spotifyService);
             await discordBot.StartAsyncBot(DiscordToken);
             await Task.Delay(-1);
+
+            
+
+
+        
+        //     }
+
+        //     var trackName = spotifyBot.GetTrackByID("1s6ux0lNiTziSrd7iUAADH");
+        //     Console.WriteLine(trackName);
+        //     await Task.Delay(-1);
         }
     }
 }
+       

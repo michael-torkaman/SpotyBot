@@ -9,15 +9,37 @@ using SpotifyAPI.Web.Http;
 namespace SpotyBot;
 public class SpotifyService{
 
-    private readonly SpotifyClient _spotifyClient;
+    private SpotifyClient _spotifyClient;
 
     private const string _playlistName = "Seattle Satellites";
 
-    public SpotifyService(string clientId, string clientSecret){
-        _spotifyClient = new SpotifyClient(SpotifyClientConfig.
-            CreateDefault().
-            WithAuthenticator(new ClientCredentialsAuthenticator(clientId, clientSecret))
-            );
+    public SpotifyService(string client_id, string client_secret, string redirectUri)
+    {
+        var config = SpotifyClientConfig.CreateDefault();
+        var request = new OAuthClient(config);
+        var loginRequest = new LoginRequest(
+            new Uri(redirectUri),
+            client_id,
+            LoginRequest.ResponseType.Code
+        )
+        {
+            Scope = new[] { Scopes.PlaylistModifyPrivate, Scopes.PlaylistModifyPublic }
+        };
+
+        Uri uri = loginRequest.ToUri();
+        Console.WriteLine($"Please log in to Spotify by visiting the following URL: {uri}");
+    }
+
+
+    public async Task InitializeClient(string authCode, string clientId, string clientSecret, string redirectUri)
+    {
+        var config = SpotifyClientConfig.CreateDefault();
+        var request = new OAuthClient(config);
+        var response = await request.RequestToken(
+            new AuthorizationCodeTokenRequest(clientId, clientSecret, authCode, new Uri(redirectUri))
+        );
+
+        _spotifyClient = new SpotifyClient(response.AccessToken);
     }
 
     /// <summary>
@@ -47,8 +69,6 @@ public class SpotifyService{
 
         return newPlaylist.Id;
     }
-
-    
 
     public async Task<bool> AddToPlaylist(string trackId)
     {

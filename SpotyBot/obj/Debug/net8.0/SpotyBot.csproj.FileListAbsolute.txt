@@ -68,3 +68,6 @@
 /Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net8.0/SpotyBot.csproj.CopyComplete
 /Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net8.0/SpotyBot.genruntimeconfig.cache
 /Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/obj/Debug/net8.0/ref/SpotyBot.dll
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/EmbedIO.dll
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/SpotifyAPI.Web.Auth.dll
+/Users/michaeltorkaman/Projects/SpotyBot/SpotyBot/bin/Debug/net8.0/Swan.Lite.dll
