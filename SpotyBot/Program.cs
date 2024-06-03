@@ -4,45 +4,79 @@ using Discord.WebSocket;
 using DotNetEnv;
 using Microsoft.VisualBasic;
 using SpotifyAPI.Web;
+using SpotifyAPI.Web.Auth;
 
-namespace SpotyBot{
-    internal class Program{
-       
+namespace SpotyBot
+{
+    public class Program
+    {
+        private static EmbedIOAuthServer _server;
+        private static string spotifyClientId;
+        private static string spotifyClientSecret;
+        private static string spotifyRedirectUri;
+
+        private static SpotifyService _spotifyClient;
+        private static DiscordBot _discordBot;
+
         static async Task Main(string[] args)
         {
-            // load .env files containing discord token   
+            // Load .env file containing Discord token
             DotNetEnv.Env.Load();
 
             // Discord bot token
             var DiscordToken = Environment.GetEnvironmentVariable("DISCORDBOT_TOKEN");
-            if (DiscordToken == null) return;
+            if (DiscordToken == null)
+            {
+                Console.WriteLine("Discord token not found");
+                return;
+            }
 
-            // setting spotify client_id and client_secret 
-            var spotifyClientId = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_ID");
-            var spotifyClientSecret = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_SECRET");
-            var spotifyRedirectUri = Environment.GetEnvironmentVariable("SPOTIFYSERVICE_URI");
+            // Setting Spotify client_id and client_secret
+            spotifyClientId = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_ID");
+            spotifyClientSecret = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_SECRET");
+            spotifyRedirectUri = Environment.GetEnvironmentVariable("SPOTIFYSERVICE_URI");
 
-            if (spotifyClientId == null || spotifyClientSecret == null) return;
+            if (spotifyClientId == null || spotifyClientSecret == null || spotifyRedirectUri == null)
+            {
+                Console.WriteLine("Spotify credentials not found");
+                return;
+            }
 
-            // init spotify bot
-            SpotifyService spotifyService = new SpotifyService(spotifyClientId, spotifyClientSecret, spotifyRedirectUri);
+            _server = new EmbedIOAuthServer(new Uri(spotifyRedirectUri), 5543);
+            await _server.Start();
 
-            //init discord bot 
-            DiscordBot discordBot = new DiscordBot(spotifyService);
-            await discordBot.StartAsyncBot(DiscordToken);
-            
+            _server.AuthorizationCodeReceived += OnAuthorizationCodeReceived;
+            _server.ErrorReceived += OnErrorReceived;
+
+            var request = new LoginRequest(_server.BaseUri, spotifyClientId, LoginRequest.ResponseType.Code)
+            {
+                Scope = new List<string> { Scopes.UserReadEmail }
+            };
+            BrowserUtil.Open(request.ToUri());
+
             await Task.Delay(-1);
+        }
 
+        private static async Task OnAuthorizationCodeReceived(object sender, AuthorizationCodeResponse response)
+        {
+            await _server.Stop();
+
+            var config = SpotifyClientConfig.CreateDefault();
+            var tokenResponse = await new OAuthClient(config).RequestToken(
+                new AuthorizationCodeTokenRequest(
+                    spotifyClientId, spotifyClientSecret, response.Code, new Uri(spotifyRedirectUri)
+                )
+            );
+
+            _spotifyClient = new SpotifyService(tokenResponse.AccessToken);
+            _discordBot = new DiscordBot(_spotifyClient);
             
+        }
 
-
-        
-        //     }
-
-        //     var trackName = spotifyBot.GetTrackByID("1s6ux0lNiTziSrd7iUAADH");
-        //     Console.WriteLine(trackName);
-        //     await Task.Delay(-1);
+        private static async Task OnErrorReceived(object sender, string error, string state)
+        {
+            Console.WriteLine($"Aborting authorization, error received: {error}");
+            await _server.Stop();
         }
     }
 }
-       

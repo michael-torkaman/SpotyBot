@@ -13,21 +13,9 @@ public class SpotifyService{
 
     private const string _playlistName = "Seattle Satellites";
 
-    public SpotifyService(string client_id, string client_secret, string redirectUri)
+    public SpotifyService(string authCode)
     {
-        var config = SpotifyClientConfig.CreateDefault();
-        var request = new OAuthClient(config);
-        var loginRequest = new LoginRequest(
-            new Uri(redirectUri),
-            client_id,
-            LoginRequest.ResponseType.Code
-        )
-        {
-            Scope = new[] { Scopes.PlaylistModifyPrivate, Scopes.PlaylistModifyPublic }
-        };
-
-        Uri uri = loginRequest.ToUri();
-        Console.WriteLine($"Please log in to Spotify by visiting the following URL: {uri}");
+        _spotifyClient = new SpotifyClient(authCode);
     }
 
 
