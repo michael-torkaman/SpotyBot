@@ -9,15 +9,25 @@ using SpotifyAPI.Web.Http;
 namespace SpotyBot;
 public class SpotifyService{
 
-    private readonly SpotifyClient _spotifyClient;
+    private SpotifyClient _spotifyClient;
 
     private const string _playlistName = "Seattle Satellites";
 
-    public SpotifyService(string clientId, string clientSecret){
-        _spotifyClient = new SpotifyClient(SpotifyClientConfig.
-            CreateDefault().
-            WithAuthenticator(new ClientCredentialsAuthenticator(clientId, clientSecret))
-            );
+    public SpotifyService(string authCode)
+    {
+        _spotifyClient = new SpotifyClient(authCode);
+    }
+
+
+    public async Task InitializeClient(string authCode, string clientId, string clientSecret, string redirectUri)
+    {
+        var config = SpotifyClientConfig.CreateDefault();
+        var request = new OAuthClient(config);
+        var response = await request.RequestToken(
+            new AuthorizationCodeTokenRequest(clientId, clientSecret, authCode, new Uri(redirectUri))
+        );
+
+        _spotifyClient = new SpotifyClient(response.AccessToken);
     }
 
     /// <summary>
@@ -31,33 +41,63 @@ public class SpotifyService{
         return track;
     }
 
-    public async Task<string> EnsurePlaylistExists(){
-        var currentUser = await _spotifyClient.UserProfile.Current();
-        var playlists = await _spotifyClient.Playlists.CurrentUsers();
-        var playlist = playlists.Items.Find(p => p.Name == _playlistName);
-        
-        if(playlist != null){
-            return playlist.Id;
-        }
-
-        var newPlaylist = await _spotifyClient.Playlists.Create(currentUser.Id, new PlaylistCreateRequest(_playlistName){
-            Description = "song suggestions from friends",
-            Public = false
-        });
-
-        return newPlaylist.Id;
+    public async Task<bool> UserHasPlaylist(){
+        var result = await UserHasPlaylist(_playlistName);
+        return result;
     }
 
-    
-
-    public async Task<bool> AddToPlaylist(string trackId)
+    public async Task<bool> UserHasPlaylist(string playlistName)
     {
-        var playlistId = await EnsurePlaylistExists();
-        var addItemsRequest = new PlaylistAddItemsRequest(new List<string> { $"spotify:track:{trackId}" });
-        var response = await _spotifyClient.Playlists.AddItems(playlistId, addItemsRequest);
+    try
+    {
+        var currentUser = await _spotifyClient.UserProfile.Current();
 
-        return response.SnapshotId != null; 
+        // Retrieve all playlists with pagination
+        var offset = 0;
+        const int limit = 50;
+        Paging<FullPlaylist> currentPage;
+        
+        do
+        {
+            currentPage = await _spotifyClient.Playlists.CurrentUsers(new PlaylistCurrentUsersRequest { Limit = limit, Offset = offset });
+            var playlist = currentPage.Items.FirstOrDefault(p => p.Name.Equals(playlistName, StringComparison.OrdinalIgnoreCase));
+
+            if (playlist != null)
+            {
+                return true;
+            }
+
+            offset += limit;
+        } while (currentPage.Items.Count == limit);
+
+        return false;
     }
+    catch (APIUnauthorizedException)
+    {
+        // Handle unauthorized error (e.g., refresh token)
+        throw new Exception("Unauthorized access. Please check your credentials.");
+    }
+    catch (APIException apiEx)
+    {
+        // Handle API-related errors
+        throw new Exception($"Spotify API error: {apiEx.Message}");
+    }
+    catch (Exception ex)
+    {
+        // Handle other unexpected errors
+        throw new Exception($"An unexpected error occurred: {ex.Message}");
+    }
+}
+
+
+    // public async Task<bool> AddToPlaylist(string trackId)
+    // {
+    //     var playlistId = await EnsurePlaylistExists();
+    //     var addItemsRequest = new PlaylistAddItemsRequest(new List<string> { $"spotify:track:{trackId}" });
+    //     var response = await _spotifyClient.Playlists.AddItems(playlistId, addItemsRequest);
+
+    //     return response.SnapshotId != null; 
+    // }
 
     /// <summary>
     /// takes a link to a spotify song and returns the track id from the url using regex
@@ -70,4 +110,6 @@ public class SpotifyService{
         var match = regex.Match(url);
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
+
+    
 }

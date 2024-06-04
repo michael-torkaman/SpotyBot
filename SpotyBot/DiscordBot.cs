@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Discord;
 using Discord.WebSocket;
 using DotNetEnv;
@@ -56,12 +57,17 @@ public class DiscordBot{
 
         var trackInfo = await _spotifyService.GetTrackByID(trackId);
 
-        await _spotifyService.EnsurePlaylistExists();
-
-        await _spotifyService.AddToPlaylist(trackId);
+        await SendMessageAsync(await TrackInfoToString(trackInfo));
+      
     }
 
+    public async Task<string> TrackInfoToString(SpotifyAPI.Web.FullTrack track){
+        var sb = new StringBuilder();
 
+        sb.Append("Track name: " + track.Name.ToString() + "\n"); 
+        sb.Append("Artist: " + track.Album.Name.ToString());
+        return sb.ToString();
+    }
 
     private Task Log(LogMessage logMessage)
     {

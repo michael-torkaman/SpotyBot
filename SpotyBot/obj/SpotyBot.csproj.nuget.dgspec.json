@@ -49,6 +49,10 @@
             "SpotifyAPI.Web": {
               "target": "Package",
               "version": "[7.1.1, )"
+            },
+            "SpotifyAPI.Web.Auth": {
+              "target": "Package",
+              "version": "[7.1.1, )"
             }
           },
           "imports": [
