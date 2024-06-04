@@ -172,4 +172,37 @@ public class SpotifyService{
         }
     }
 
+
+    public async Task<string> CreateNewPublicPlaylist(string playlistName, string description)
+    {
+        try
+        {
+            var currentUser = await _spotifyClient.UserProfile.Current();
+
+            var newPlaylist = await _spotifyClient.Playlists.Create(currentUser.Id, new PlaylistCreateRequest(playlistName)
+            {
+                Description = description,
+                Public = true
+            });
+
+            return newPlaylist.Id;
+        }
+        catch (APIUnauthorizedException)
+        {
+            // Handle unauthorized error (e.g., refresh token)
+            throw new Exception("Unauthorized access. Please check your credentials.");
+        }
+        catch (APIException apiEx)
+        {
+            // Handle API-related errors
+            throw new Exception($"Spotify API error: {apiEx.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Handle other unexpected errors
+            throw new Exception($"An unexpected error occurred: {ex.Message}");
+        }
+    }
+
+
 }
