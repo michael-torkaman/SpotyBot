@@ -10,13 +10,19 @@ namespace SpotyBot
 {
     public class Program
     {
+        // SpotifyApi supplied server to validate client credentials
         private static EmbedIOAuthServer _server;
+        
+        //client secrets and id's for both spotify and discord
         private static string discordToken;
         private static string spotifyClientId;
         private static string spotifyClientSecret;
         private static string spotifyRedirectUri;
-
+        
+        //spotify user session
         private static SpotifyService _spotifyClient;
+        
+        // discord bot
         private static DiscordBot _discordBot;
 
         static async Task Main(string[] args)
@@ -32,7 +38,7 @@ namespace SpotyBot
                 return;
             }
 
-            // Setting Spotify client_id and client_secret
+            // Setting Spotify client_id and client_secret and redirect uri
             spotifyClientId = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_ID");
             spotifyClientSecret = Environment.GetEnvironmentVariable("SPOTIFYBOT_CLIENT_SECRET");
             spotifyRedirectUri = Environment.GetEnvironmentVariable("SPOTIFYSERVICE_URI");
@@ -51,6 +57,7 @@ namespace SpotyBot
 
             var request = new LoginRequest(_server.BaseUri, spotifyClientId, LoginRequest.ResponseType.Code)
             {
+                //scopes for spotify session 
                 Scope = new List<string> {
                     Scopes.PlaylistModifyPublic,
                     Scopes.PlaylistModifyPrivate,
@@ -64,6 +71,12 @@ namespace SpotyBot
             await Task.Delay(-1);
         }
 
+        /// <summary>
+        /// Oauth for spotify client. On successful retrieval of token initializes
+        /// Spotify Client session and starts discord bot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="response"></param>
         private static async Task OnAuthorizationCodeReceived(object sender, AuthorizationCodeResponse response)
         {
             await _server.Stop();
@@ -74,13 +87,19 @@ namespace SpotyBot
                     spotifyClientId, spotifyClientSecret, response.Code, new Uri(spotifyRedirectUri)
                 )
             );
-
+            
             _spotifyClient = new SpotifyService(tokenResponse.AccessToken);
+            
             _discordBot = new DiscordBot(_spotifyClient);
             await _discordBot.StartAsyncBot(discordToken);
-            
         }
 
+        /// <summary>
+        /// error handlilng for Oauth authentication
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="error"></param>
+        /// <param name="state"></param>
         private static async Task OnErrorReceived(object sender, string error, string state)
         {
             Console.WriteLine($"Aborting authorization, error received: {error}");

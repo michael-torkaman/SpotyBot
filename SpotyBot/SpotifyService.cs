@@ -7,8 +7,14 @@ using SpotifyAPI.Web;
 using SpotifyAPI.Web.Http;
 
 namespace SpotyBot;
+/// <summary>
+/// Serves as a service giving the ability to create and manipulate data on a
+/// spotify account. requires Oauth to work with private data.
+/// does not implement Oauth
+/// </summary>
 public class SpotifyService{
-
+    
+    //spotify user session
     private SpotifyClient _spotifyClient;
 
     private const string _playlistName = "Seattle Satellites";
@@ -18,6 +24,13 @@ public class SpotifyService{
         _spotifyClient = new SpotifyClient(authCode);
     }
 
+    /// <summary>
+    /// async task that Initializes the SpotifyClient object 
+    /// </summary>
+    /// <param name="authCode"></param>
+    /// <param name="clientId"></param>
+    /// <param name="clientSecret"></param>
+    /// <param name="redirectUri"></param>
     public async Task InitializeClient(string authCode, string clientId, string clientSecret, string redirectUri)
     {
         var config = SpotifyClientConfig.CreateDefault();
@@ -40,11 +53,22 @@ public class SpotifyService{
         return track;
     }
 
+    /// <summary>
+    /// No arg overloaded method that check if the default playlist name
+    /// Seattle Sattelites exist in user's spotify profile
+    /// </summary>
+    /// <returns></returns>
     public async Task<bool> UserHasPlaylist(){
         var result = await UserHasPlaylist(_playlistName);
         return result;
     }
 
+    /// <summary>
+    /// Checks if a User has a playlist by the name of param playlistName 
+    /// </summary>
+    /// <param name="playlistName"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<bool> UserHasPlaylist(string playlistName)
     {
     try
@@ -88,16 +112,6 @@ public class SpotifyService{
         }
     }
 
-
-    // public async Task<bool> AddToPlaylist(string trackId)
-    // {
-    //     var playlistId = await EnsurePlaylistExists();
-    //     var addItemsRequest = new PlaylistAddItemsRequest(new List<string> { $"spotify:track:{trackId}" });
-    //     var response = await _spotifyClient.Playlists.AddItems(playlistId, addItemsRequest);
-
-    //     return response.SnapshotId != null; 
-    // }
-
     /// <summary>
     /// takes a link to a spotify song and returns the track id from the url using regex
     /// </summary>
@@ -111,6 +125,12 @@ public class SpotifyService{
     }
 
 
+    /// <summary>
+    /// add song to default playlist by track id 
+    /// </summary>
+    /// <param name="trackId"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<bool> AddSongToPlaylistByName(string trackId)
     {
         try
@@ -172,9 +192,15 @@ public class SpotifyService{
     }
 
 
+    /// <summary>
+    /// Creates public playlist by the name of field _playlistName
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<string> CreateNewPublicPlaylist()
     {
-        var description = "your songs from fellow freinds";
+        //description field of the palylist
+        var description = "your songs from fellow friends";
         try
         {
             var currentUser = await _spotifyClient.UserProfile.Current();
@@ -189,17 +215,14 @@ public class SpotifyService{
         }
         catch (APIUnauthorizedException)
         {
-            // Handle unauthorized error (e.g., refresh token)
             throw new Exception("Unauthorized access. Please check your credentials.");
         }
         catch (APIException apiEx)
         {
-            // Handle API-related errors
             throw new Exception($"Spotify API error: {apiEx.Message}");
         }
         catch (Exception ex)
         {
-            // Handle other unexpected errors
             throw new Exception($"An unexpected error occurred: {ex.Message}");
         }
     }
