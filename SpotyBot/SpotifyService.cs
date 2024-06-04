@@ -81,13 +81,13 @@ public class SpotifyService{
     {
         // Handle API-related errors
         throw new Exception($"Spotify API error: {apiEx.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Handle other unexpected errors
+            throw new Exception($"An unexpected error occurred: {ex.Message}");
+        }
     }
-    catch (Exception ex)
-    {
-        // Handle other unexpected errors
-        throw new Exception($"An unexpected error occurred: {ex.Message}");
-    }
-}
 
 
     // public async Task<bool> AddToPlaylist(string trackId)
@@ -110,4 +110,66 @@ public class SpotifyService{
         var match = regex.Match(url);
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
+
+    public async Task<bool> AddSongToPlaylistByName(string playlistName, string trackId)
+    {
+        try
+        {
+            var currentUser = await _spotifyClient.UserProfile.Current();
+
+            // Check if the user has the playlist
+            var hasPlaylist = await UserHasPlaylist(playlistName);
+
+            if (!hasPlaylist)
+            {
+                throw new Exception($"Playlist '{playlistName}' not found.");
+            }
+
+            // Retrieve all playlists with pagination to find the playlist ID
+            var offset = 0;
+            const int limit = 50;
+            Paging<FullPlaylist> currentPage;
+            FullPlaylist targetPlaylist = null;
+
+            do
+            {
+                currentPage = await _spotifyClient.Playlists.CurrentUsers(new PlaylistCurrentUsersRequest { Limit = limit, Offset = offset });
+                targetPlaylist = currentPage.Items.FirstOrDefault(p => p.Name.Equals(playlistName, StringComparison.OrdinalIgnoreCase));
+
+                if (targetPlaylist != null)
+                {
+                    break;
+                }
+
+                offset += limit;
+            } while (currentPage.Items.Count == limit);
+
+            if (targetPlaylist == null)
+            {
+                throw new Exception($"Playlist '{playlistName}' not found.");
+            }
+
+            // Add the track to the playlist
+            var addItemsRequest = new PlaylistAddItemsRequest(new List<string> { $"spotify:track:{trackId}" });
+            var response = await _spotifyClient.Playlists.AddItems(targetPlaylist.Id, addItemsRequest);
+
+            return response.SnapshotId != null;
+        }
+        catch (APIUnauthorizedException)
+        {
+            // Handle unauthorized error (e.g., refresh token)
+            throw new Exception("Unauthorized access. Please check your credentials.");
+        }
+        catch (APIException apiEx)
+        {
+            // Handle API-related errors
+            throw new Exception($"Spotify API error: {apiEx.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Handle other unexpected errors
+            throw new Exception($"An unexpected error occurred: {ex.Message}");
+        }
+    }
+
 }
