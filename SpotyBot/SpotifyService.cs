@@ -18,7 +18,6 @@ public class SpotifyService{
         _spotifyClient = new SpotifyClient(authCode);
     }
 
-
     public async Task InitializeClient(string authCode, string clientId, string clientSecret, string redirectUri)
     {
         var config = SpotifyClientConfig.CreateDefault();
@@ -111,16 +110,16 @@ public class SpotifyService{
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
 
+
     public async Task<bool> AddSongToPlaylistByName(string trackId)
     {
         try
         {
+            //get user profile info 
             var currentUser = await _spotifyClient.UserProfile.Current();
 
             // Check if the user has the playlist
-            var hasPlaylist = await UserHasPlaylist(_playlistName);
-
-            if (!hasPlaylist)
+            if (await UserHasPlaylist(_playlistName) == false)
             {
                 throw new Exception($"Playlist '{_playlistName}' not found.");
             }
