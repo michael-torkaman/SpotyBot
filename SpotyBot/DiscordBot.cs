@@ -63,6 +63,8 @@ public class DiscordBot{
 
             await _spotifyService.CreateNewPublicPlaylist();
         }
+
+        await _spotifyService.AddSongToPlaylistByName(trackId);
         
     }
 

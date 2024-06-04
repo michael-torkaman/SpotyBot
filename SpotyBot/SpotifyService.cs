@@ -111,18 +111,18 @@ public class SpotifyService{
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
 
-    public async Task<bool> AddSongToPlaylistByName(string playlistName, string trackId)
+    public async Task<bool> AddSongToPlaylistByName(string trackId)
     {
         try
         {
             var currentUser = await _spotifyClient.UserProfile.Current();
 
             // Check if the user has the playlist
-            var hasPlaylist = await UserHasPlaylist(playlistName);
+            var hasPlaylist = await UserHasPlaylist(_playlistName);
 
             if (!hasPlaylist)
             {
-                throw new Exception($"Playlist '{playlistName}' not found.");
+                throw new Exception($"Playlist '{_playlistName}' not found.");
             }
 
             // Retrieve all playlists with pagination to find the playlist ID
@@ -134,7 +134,7 @@ public class SpotifyService{
             do
             {
                 currentPage = await _spotifyClient.Playlists.CurrentUsers(new PlaylistCurrentUsersRequest { Limit = limit, Offset = offset });
-                targetPlaylist = currentPage.Items.FirstOrDefault(p => p.Name.Equals(playlistName, StringComparison.OrdinalIgnoreCase));
+                targetPlaylist = currentPage.Items.FirstOrDefault(p => p.Name.Equals(_playlistName, StringComparison.OrdinalIgnoreCase));
 
                 if (targetPlaylist != null)
                 {
@@ -146,7 +146,7 @@ public class SpotifyService{
 
             if (targetPlaylist == null)
             {
-                throw new Exception($"Playlist '{playlistName}' not found.");
+                throw new Exception($"Playlist '{_playlistName}' not found.");
             }
 
             // Add the track to the playlist

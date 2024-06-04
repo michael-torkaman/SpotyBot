@@ -51,7 +51,13 @@ namespace SpotyBot
 
             var request = new LoginRequest(_server.BaseUri, spotifyClientId, LoginRequest.ResponseType.Code)
             {
-                Scope = new List<string> { Scopes.UserReadEmail }
+                Scope = new List<string> {
+                    Scopes.PlaylistModifyPublic,
+                    Scopes.PlaylistModifyPrivate,
+                    Scopes.PlaylistReadPrivate,
+                    Scopes.UserLibraryRead,
+                    Scopes.UserLibraryModify
+                }
             };
             BrowserUtil.Open(request.ToUri());
 
