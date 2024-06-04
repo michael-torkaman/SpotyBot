@@ -110,6 +110,4 @@ public class SpotifyService{
         var match = regex.Match(url);
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
-
-    
 }
