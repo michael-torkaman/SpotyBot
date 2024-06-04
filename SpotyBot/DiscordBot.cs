@@ -58,7 +58,12 @@ public class DiscordBot{
         var trackInfo = await _spotifyService.GetTrackByID(trackId);
 
         await SendMessageAsync(await TrackInfoToString(trackInfo));
-      
+
+        if(await _spotifyService.UserHasPlaylist() == false){
+
+            await _spotifyService.CreateNewPublicPlaylist();
+        }
+        
     }
 
     public async Task<string> TrackInfoToString(SpotifyAPI.Web.FullTrack track){

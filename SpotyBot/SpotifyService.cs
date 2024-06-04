@@ -173,13 +173,14 @@ public class SpotifyService{
     }
 
 
-    public async Task<string> CreateNewPublicPlaylist(string playlistName, string description)
+    public async Task<string> CreateNewPublicPlaylist()
     {
+        var description = "your songs from fellow freinds";
         try
         {
             var currentUser = await _spotifyClient.UserProfile.Current();
 
-            var newPlaylist = await _spotifyClient.Playlists.Create(currentUser.Id, new PlaylistCreateRequest(playlistName)
+            var newPlaylist = await _spotifyClient.Playlists.Create(currentUser.Id, new PlaylistCreateRequest(_playlistName)
             {
                 Description = description,
                 Public = true
