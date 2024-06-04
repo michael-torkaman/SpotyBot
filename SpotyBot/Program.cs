@@ -11,6 +11,7 @@ namespace SpotyBot
     public class Program
     {
         private static EmbedIOAuthServer _server;
+        private static string discordToken;
         private static string spotifyClientId;
         private static string spotifyClientSecret;
         private static string spotifyRedirectUri;
@@ -24,8 +25,8 @@ namespace SpotyBot
             DotNetEnv.Env.Load();
 
             // Discord bot token
-            var DiscordToken = Environment.GetEnvironmentVariable("DISCORDBOT_TOKEN");
-            if (DiscordToken == null)
+            discordToken = Environment.GetEnvironmentVariable("DISCORDBOT_TOKEN");
+            if (discordToken == null)
             {
                 Console.WriteLine("Discord token not found");
                 return;
@@ -70,6 +71,7 @@ namespace SpotyBot
 
             _spotifyClient = new SpotifyService(tokenResponse.AccessToken);
             _discordBot = new DiscordBot(_spotifyClient);
+            await _discordBot.StartAsyncBot(discordToken);
             
         }
 
